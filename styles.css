@@ -70,12 +70,12 @@
 .main-area {
   flex: 1;
   display: flex;
-  flex-wrap: wrap;
   background-color: #829461;
   width: 85%;
+  flex-shrink: 0;
   position: relative;
   flex-direction: column;
-}
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)
 
 .homePage {
   background-color: #abb95b;
@@ -83,73 +83,87 @@
   display: flex;
   justify-content: right;
   position: relative;
-  height: 95%;
+  height: 5%;
   width: 100%;
 }
 
 .map {
   flex: 1;
-  display: flex;
   max-width: 90%;
-  max-height: 75%;
+  max-height: 90%;
   padding: 25px;
   background-color: #abb95b;
   position: relative;
 }
 
-
-
 .current-image {
   background-color: #a92d63;
-  flex: 1;
   display: flex;
-  max-height: 75%;
-  position: relative;
-  flex-direction:column ;
+  justify-content: space-between;
+  gap: 25px;
+  padding: 25px;
+}
+
+.current-image-box1 {
+  flex-direction: column;
+  flex: 3 0 0;
 }
 
 .current-image-show-here {
-  max-width: 80%;
   border-radius: 12px;
-  max-height: 80%;
-  background-color: #0a1684;
-  padding: 20%;
+  max-height: 95%;
+  background-color: #b8bce7;
+  padding: 25px;
+  width: 100;
 }
 
+.cur-img {
+  border-radius: 12px;
+  max-height: 95%;
+  background-color: #0c133c;
+  padding: 30%;
+  width: 100;
+}
 .current-image-title {
   size: 95%;
+  border-radius: 12px;
   height: auto;
+  padding: 25px;
   background-color: #a0a5d2;
-  padding: 5px;
+}
+.current-image-box2 {
+  flex: 1 0 0;
 }
 
 .current-image-description {
   size: 95%;
-  background-color: #8a581c;
-  padding: 5px;
+  border-radius: 12px;
+  height: auto;
+  padding: 25px;
+  background-color: #a0a5d2;
 }
 
 .current-image-location {
   size: 95%;
-  background-color: #45902e;
-  padding: 5px;
+  border-radius: 12px;
+  height: auto;
+  padding: 25px;
+  background-color: #a0a5d2;
 }
 
 .current-image-tags {
-  size: 95%;
   background-color: #902e4b;
-  padding: 5px;
+  padding: 25px;
+  height: 95%;
+  border-radius: 12px;
 }
+
 .current-image-tag-list {
-  size: 95%;
+  height: 95%;
   background-color: #a4360eb0;
   padding: 5px;
+  border-radius: 12px;
 }
-
-
-
-
-
 
 .image-upload {
   background-color: #2e3890;

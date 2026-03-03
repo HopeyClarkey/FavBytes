@@ -16,9 +16,9 @@ export default function App() {
         </div>
 
         <div className="main-area">
-          <Homepage />
+
           <ImagePage />
-          <ImageUpload />
+          <ImageUpload />          <Homepage />
         </div>
       </div>
       <div className="gallery-section">
