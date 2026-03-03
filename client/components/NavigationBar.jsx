@@ -1,23 +1,41 @@
-export default function NavBar() {
-
-
+export default function NavBar({ view, setView }) {
+  
   return (
-    <div id="navigation-bar"className="navigation-bar">
-      <h1>This is the Navigation Bar!</h1>
-      <ul>
-        <li>
-          <a>Home</a>
-        </li>
-        <li>
-          <a>Image Upload</a>
-        </li>
-        <li>
-          <a>Gallery</a>
-        </li>
-        <li>
-          <a>Settings</a>
-        </li>
-      </ul>
+    <div id="sidebar" className="sidebar">
+      <div id="navigation-bar" className="navigation-bar">
+        <nav>
+          <ul>
+            <li>
+              <button
+                onClick={() => {
+                  setView('HomePage');
+                }}
+              >
+                {'Go to Home'}
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => {
+                  setView('ImageUpload');
+                }}
+              >
+                {'Go to Upload'}
+              </button>
+            </li>
+                        <li>
+              <button
+                onClick={() => {
+                  setView('ImagePage');
+                }}
+              >
+                {'Go to Image'}
+              </button>
+            </li>
+            <li>{view}</li>
+          </ul>
+        </nav>
+      </div>
     </div>
   );
 }

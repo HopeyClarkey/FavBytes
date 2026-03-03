@@ -1,6 +1,7 @@
 import ImageTags from './ImageTags';
 
-export default function ImagePage() {
+export default function ImagePage({ isActive = true, setIsActive }) {
+  console.log(!isActive ? 'ImagePage is active' : 'ImagePage isnot active');
   return (
     <div id="current-image" className="current-image">
       <div id="current-image-box1" className="current-image-box1">
@@ -9,13 +10,9 @@ export default function ImagePage() {
 
           <div id="cur-img" className="cur-img"></div>
         </div>
-
         <div id="current-image-title" className="current-image-title">
           <h3> current image title here </h3>
-        </div>
-      </div>
-
-      <div id="current-image-box2" className="current-image-box2">
+        </div>{' '}
         <div
           id="current-image-description"
           className="current-image-description"
@@ -25,6 +22,9 @@ export default function ImagePage() {
         <div id="current-image-location" className="current-image-location">
           <h3> current image location here</h3>
         </div>
+      </div>
+
+      <div id="current-image-box2" className="current-image-box2">
         <div id="current-image-tags" className="current-image-tags">
           <ImageTags />
         </div>
