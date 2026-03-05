@@ -65,8 +65,11 @@ module.exports = {
       inject: 'body',
     }),
     new webpack.DefinePlugin({
-      'MAPBOX_TOKEN': JSON.stringify(process.env.MAPBOX_TOKEN),
-      'GOOGLE_CLIENT_ID': JSON.stringify(process.env.GOOGLE_CLIENT_ID)
+      MAPBOX_TOKEN: JSON.stringify(process.env.MAPBOX_TOKEN),
+    }),
+
+    new webpack.DefinePlugin({
+      GOOGLE_CLIENT_ID: JSON.stringify(process.env.GOOGLE_CLIENT_ID),
     }),
   ],
 };
