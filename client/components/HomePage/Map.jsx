@@ -38,7 +38,7 @@ export default function AppMap({ user }) {
                 setSelectedDish(dish);
               }}
             >
-              <div style={{ fontSize: '24px', cursor: 'pointer' }}>📍</div>
+              <div style={{ fontSize: '24px', cursor: 'pointer' }}>📍😋</div>
             </Marker>
           ) : null
         ))}
