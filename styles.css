@@ -131,7 +131,6 @@
   flex: 1;
   display: flex;
   background-color: #829461;
-  height: 70%;
   flex-shrink: 0;
   position: relative;
   flex-direction: column;
