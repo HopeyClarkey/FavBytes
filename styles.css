@@ -37,7 +37,6 @@
   display: flex;
   flex-direction: row;
   justify-content: center;
-  font-size: xx-large;
 }
 .login-container {
   display: flex;
@@ -53,9 +52,7 @@
 }
 .user-header-after-login {
   display: flex;
-  flex-direction: row;
-  justify-content: center;
-  font-size: xx-large;
+  flex-direction: row
 }
 
 .logged-in {
@@ -184,7 +181,7 @@
   justify-content: right;
   position: relative;
   width: 100%;
-  padding: 25px
+  padding: 25px;
 }
 
 .map {

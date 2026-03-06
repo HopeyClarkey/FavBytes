@@ -6,7 +6,7 @@ import ImagePage from './ImagePage/ImagePage';
 import NavBar from './NavigationBar';
 import ImageUpload from './ImageUpload/ImageUpload';
 
-function MainView({ view, isActive, setIsActive, }) {
+function MainView({ view, isActive, setIsActive }) {
   return view === 'ImageUpload' ? (
     <ImageUpload isActive={isActive} setIsActive={setIsActive} />
   ) : view === 'ImagePage' ? (
@@ -52,18 +52,22 @@ export default function App() {
               id="user-header-after-login"
               className="user-header-after-login"
             >
-              <span>FaveBytes! save your favorites.</span>
-              {user.picture && (
-                <img
-                  src={user.picture}
-                  alt={user.name}
-                  style={{ width: 32, height: 32, borderRadius: '50%' }}
-                />
-              )}
-              Welcome, {user.name}!
-              <span>
+              <div>FaveBytes! save your favorites.</div>
+              <div>
+                <in-line>
+                  {user.picture && (
+                    <img
+                      src={user.picture}
+                      alt={user.name}
+                      style={{ width: 32, height: 32, borderRadius: '50%' }}
+                    />
+                  )}
+                  Welcome, {user.name}!
+                </in-line>
+              </div>
+              <div>
                 <button onClick={handleLogout}>Log out</button>
-              </span>
+              </div>
             </div>
 
             <div id="content-row" className="content-row">
@@ -78,7 +82,6 @@ export default function App() {
                 )}
 
                 <div id="main-area" className="main-area">
-
                   <div id="main-area-menu" className="main-area-menu">
                     <button onClick={handleToggleSidebar}>
                       Toggle Sidebar Here
