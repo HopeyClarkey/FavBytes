@@ -1,5 +1,11 @@
-export default function NavBar({ view, setView, isShowingGallery, onToggleGallery }) {
-  
+
+export default function NavBar({
+  view,
+  setView,
+  isShowingGallery,
+
+  onToggleGallery,
+}) {
   return (
     <div id="sidebar" className="sidebar">
       <div id="navigation-bar" className="navigation-bar">
