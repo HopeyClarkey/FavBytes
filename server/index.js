@@ -37,34 +37,10 @@ app.get('/', (req, res) => {
   res.send('FavBytes API is running...');
 });
 
-app.post('/api/favDish', async (req, res) => {
-  const [
-    {
-      userId,
-      name,
-      restaurantName,
-      description,
-      rating,
-      imageUrl,
-      price,
-      location,
-      tags,
-    },
-  ] = req.params;
-  try {
-    const dish = await Dish.findOneAndUpdate().populate('userId', 'name');
-    res.status(200).json(dish);
-  } catch (error) {
-    console.error('Error updating dish:', error);
-    res
-      .status(500)
-      .json({ message: 'Error updating dish', error: error.message });
-  }
-});
-
 app.get('/api/dishes', async (req, res) => {
   try {
-    const user = res.status(200).json(dishes);
+    const dishes = await Dish.find().populate('userId', 'name');
+    res.status(200).json(dishes);
   } catch (error) {
     console.error('Error fetching dishes:', error);
     res
@@ -143,6 +119,32 @@ app.post('/auth/logout', (req, res) => {
     res.clearCookie('connect.sid');
     res.status(200).json({ message: 'Logged out successfully' });
   });
+});
+
+app.post('/api/favDish', async (req, res) => {
+  const [
+    {
+      userId,
+      name,
+      restaurantName,
+      description,
+      rating,
+      imageUrl,
+      price,
+      location,
+      tags,
+    },
+  ] = req.body;
+
+  try {
+    const dish = { data: 'test response' };
+    res.status(200).json(dish);
+  } catch (error) {
+    console.error('Error updating dish:', error);
+    res
+      .status(500)
+      .json({ message: 'Error updating dish', error: error.message });
+  }
 });
 
 app.listen(port, () => {

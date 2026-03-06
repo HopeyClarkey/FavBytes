@@ -1,6 +1,7 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import ImageUploadStars from './ImageUploadStars';
 import ImageUploadTags from './ImageUploadTags';
+import axios from 'axios';
 
 export default function ImageUpload({ isActive = true, setIsActive }) {
   const [image, setImage] = useState(null);
@@ -23,18 +24,41 @@ export default function ImageUpload({ isActive = true, setIsActive }) {
       setPreview(URL.createObjectURL(file));
     }
   };
-
+  //   {
+  //   userId,
+  //   name,
+  //   restaurantName,
+  //   description,
+  //   rating,
+  //   imageUrl,
+  //   price,
+  //   location,
+  //   tags,
+  // },
   const handleSubmit = (e) => {
-      const formData = {
-        image,
-        title,
-        description,
-        location,
-        tags,
-        stars,
-      };
-      return console.log('Form submitted!', formData);
-
+    const formData = {
+      imageURL,
+      name: title,
+      alt: title + description,
+      description,
+      location,
+      price: price,
+      tags,
+      rating: stars,
+    };
+    const favByte = async (req, res) => {
+      try {
+        const res = await fetch('/api/favDish', { body: formData });
+        if (res.ok) {
+          const data = await res.json();
+          console.log(data);
+          console.log('Form submitted!', formData);
+        }
+      } catch (err) {
+        console.error('cannot save dish:', err);
+      }
+    };
+    return favByte();
   };
 
   return (

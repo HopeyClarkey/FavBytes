@@ -4,7 +4,7 @@
     "@babel/preset-env": "^7.29.0",
     "@react-oauth/google": "^0.13.4",
     "@tailwindcss/cli": "^4.2.1",
-    "axios": "^1.13.5",
+    "axios": "^1.13.6",
     "babel": "^5.8.38",
     "babel-loader": "^10.0.0",
     "babel-preset-react": "^6.24.1",
