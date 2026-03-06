@@ -67,7 +67,7 @@
   justify-content: space-between;
   align-items: center;
   font-size: x-large;
-  max-height: 7%;
+  height: 7%;
   padding: 25px;
   flex-shrink: 0;
 }
@@ -118,9 +118,6 @@
   display: flex;
   size: 100%;
   background-color: #f0f0db;
-  flex-shrink: 0;
-  position: relative;
-  flex-direction: column;
 }
 
 .sidebar {
@@ -128,8 +125,6 @@
   height: 100%;
   background-color: #acbac4;
   display: flex;
-  flex-direction: row;
-  flex-shrink: 0;
 }
 .gallery-section {
   height: 30%;
@@ -287,19 +282,12 @@
 .image-upload {
   background-color: #5459ac;
   display: flex;
-  justify-content: space-between;
-  gap: 25px;
+  flex-direction: column;
   padding: 25px;
-  bottom: 0%;
-  position: relative;
   height: 100%;
-
   width: 100%;
 }
-.image-upload-box1 {
-  flex-direction: column;
-  flex: 3 0 0;
-}
+
 .image-upload-show-here {
   border-radius: 12px;
   max-height: 95%;
@@ -342,34 +330,52 @@
 
 .image-upload-tags {
   display: flex;
-  justify-content: center;
   background-color: #f1e3d3;
-  
+  flex-direction: row;
   padding: 25px;
   border-radius: 12px;
 }
 .image-upload-tag-container {
   display: flex;
-  flex-direction: column;
-  padding: 25px;
+  flex-direction: row;
 }
 
-.image-upload-tag-header {
-  position: relative;
+.image-upload-tag-box {
   display: flex;
-  justify-content: center;
+  background-color: #427a76;
+  flex-direction: column;
   font-size: xx-large;
 }
 
 .image-upload-tag-list {
+  background-color: #427a76;
+  size: 100%;
+  height: 100%;
+  border-radius: 12px;
+  font-size: xx-large;
+}
+
+.image-upload-stars-box {
+  background-color: #427a76;
+  display: flex;
+  justify-self: right;
+  flex-direction: column;
+  justify-content: center;
+  font-size: medium;
+}
+
+.image-upload-stars-choice {
   display: flex;
   justify-content: space-evenly;
   padding: 5px;
   width: 100%;
   height: auto;
   border-radius: 12px;
-  font-size: large;
+  font-size: xx-large;
 }
+
+
+
 .navigation-bar nav {
   display: flex;
   flex-direction: column;
