@@ -5,6 +5,7 @@ import LogIn from './LogIn';
 import ImagePage from './ImagePage/ImagePage';
 import NavBar from './NavigationBar';
 import ImageUpload from './ImageUpload/ImageUpload';
+import logo from '../../public/images/FavBytes.png';
 
 function MainView({ view, isActive, setIsActive }) {
   return view === 'ImageUpload' ? (
@@ -67,20 +68,25 @@ export default function App() {
               id="user-header-after-login"
               className="user-header-after-login"
             >
-              <div>FaveBytes! save your favorites.</div>
-              <div>
-                <in-line>
-                  {user.picture && (
-                    <img
-                      src={user.picture}
-                      alt={user.name}
-                      style={{ width: 32, height: 32, borderRadius: '50%' }}
-                    />
-                  )}
-                  Welcome, {user.name}!
-                </in-line>
+              <div id="profile-container" className="profile-container">
+                {user.picture && (
+                  <img
+                    src={user.picture}
+                    alt={user.name}
+                    style={{ width: 50, height: 50, borderRadius: '50%' }}
+                  />
+                )}
+                <h1> Welcome,</h1>
+                {user.name} 😋
               </div>
-              <div>
+              <div id="favBytes-container" className="favBytes-container">
+                <img
+                  className="Logo"
+                  src={logo}
+                  style={{ maxWidth: '250px' }}
+                />
+              </div>
+              <div id="logout-container" className="logout-container">
                 <button onClick={handleLogout}>Log out</button>
               </div>
             </div>

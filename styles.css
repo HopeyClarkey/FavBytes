@@ -33,11 +33,6 @@
   background-color: #9c5273;
 }
 
-.user-header-before-login {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-}
 .login-container {
   display: flex;
   size: 70%;
@@ -45,14 +40,17 @@
   padding: 10%;
 }
 
+.user-header-before-login {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  font-size: 50px;
+}
 .google-button {
   width: 50%;
   align-self: center;
   left: 25%;
-}
-.user-header-after-login {
-  display: flex;
-  flex-direction: row
 }
 
 .logged-in {
@@ -63,6 +61,35 @@
   width: 100vw;
 }
 
+.user-header-after-login {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-size: x-large;
+  max-height: 7%;
+  padding: 25px;
+  flex-shrink: 0;
+}
+
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.favBytes-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.logout-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-shrink: 0;
+}
 .content-row {
   flex: 1;
   background-color: #5459ac;
