@@ -24,7 +24,8 @@ export default function App() {
   const [isShowingGallery, setIsShowingGallery] = useState(false);
   const [view, setView] = useState('HomePage');
   const [isActive, setIsActive] = useState(false);
- 
+    const [dishes, setDishes] = useState([]);
+    const [selectedDish, setSelectedDish] = useState(null);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -44,7 +45,7 @@ export default function App() {
   const handleLoginSuccess = (userData) => {
     console.log(userData);
     setUser(userData);
-    vo
+
   };
 
   const handleLogout = () => {

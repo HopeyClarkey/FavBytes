@@ -98,7 +98,8 @@
   justify-content: space-between;
   align-items: center;
   font-size: x-large;
-  min-height: 10%;
+  height: 10%;
+  position: relative;
   padding: 25px;
   flex-shrink: 0;
 }
@@ -182,18 +183,19 @@
   background-color: #abb95b;
   flex: 1;
   display: flex;
-  justify-content: space-between;
   position: relative;
   width: 100%;
   padding: 25px;
 }
 .byteList-container {
   flex: 1;
+
   display: flex;
   justify-self: left;
   position: relative;
   max-height: 95%;
   border-radius: 12px;
+  max-width: 30%;
 }
 
 .byteList {
@@ -202,6 +204,16 @@
   background-color: #acbac4;
   position: relative;
   justify-self: center;
+  border-radius: 12px;
+  padding: 25px;
+}
+
+.dish {
+  flex: 1;
+  display: flex;
+  justify-self: left;
+  position: relative;
+  max-height: 95%;
   border-radius: 12px;
 
 }
