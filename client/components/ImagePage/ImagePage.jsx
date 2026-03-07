@@ -1,6 +1,6 @@
 import { React, useState } from 'react';
 import ImageTags from './ImageTags';
-import Gallery from '../Gallery/Gallery';
+
 
 export default function ImagePage({ isActive = true, setIsActive }) {
   const [searchArr, setSearchArr] = useState(['img1', 'img2', 'img3', 'img4']);
