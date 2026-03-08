@@ -28,18 +28,7 @@ export default function ImageUpload({ isActive, setIsActive, user, prefillLocati
       setPreview(URL.createObjectURL(file));
     }
   };
-  //   {
-  //   userId,
-  //   name,
-  //   restaurantName,
-  //   description,
-  //   rating,
-  //   imageUrl,
-  
-  //   price,
-  //   location,
-  //   tags,
-  // },
+
 const handleSubmit = async (e) => {
   e.preventDefault();
   
@@ -51,7 +40,7 @@ const handleSubmit = async (e) => {
   formData.append("description", description);
   formData.append("rating", stars);
   formData.append("price", price);
-  formData.append("location", location);
+  formData.append("location", prefillLocation);
   formData.append("tags", JSON.stringify(tags));
 
   try {
@@ -78,12 +67,16 @@ const handleSubmit = async (e) => {
             <span style={{ color: "white" }}>Image Preview</span>
           )}
         </div>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageChange}
-          required
-        />
+        <label className="button-style">
+          {image ? image.name : "Choose File"}
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            required
+            style={{ display: "none" }}
+          />
+        </label>
         <button className="button-style" type="submit">
           Submit Image!
         </button>
