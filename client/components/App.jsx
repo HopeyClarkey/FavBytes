@@ -47,9 +47,18 @@ export default function App() {
     vo
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+  try {
+    await fetch('/auth/logout', { 
+      method: 'POST',
+      credentials: 'include' 
+    });
+    
     setUser(null);
-  };
+  } catch (err) {
+    console.error('Logout failed:', err);
+  }
+};
 
   const handleToggleSidebar = () => {
     setIsShowingSidebar(!isShowingSidebar);

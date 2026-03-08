@@ -9,10 +9,12 @@ const User = require('../database/models/User.js');
 const Dish = require('../database/models/Dish.js');
 const compression = require('compression');
 const path = require('path');
+const upload = require('./upload');
 
 const app = express();
 const port = process.env.PORT;
 
+app.set('trust proxy', 1);
 app.use(compression());
 app.use(express.static(path.join(__dirname, '../dist')));
 
@@ -21,148 +23,139 @@ connectDB();
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 app.use(
-  cors({
-    credentials: true,
-  }),
+	cors({
+		credentials: true,
+	}),
 );
 app.use(bodyParser.json());
 app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      secure: true,
-      maxAge: 24 * 60 * 60 * 1000,
-      sameSite: 'none',
-    },
-  }),
+	session({
+		secret: process.env.SESSION_SECRET,
+		resave: false,
+		saveUninitialized: false,
+		cookie: {
+			secure: true,
+			maxAge: 86400000,
+			sameSite: 'lax',
+		},
+	}),
 );
 
-
 app.get('/api/dishes', async (req, res) => {
-  try {
-    const dishes = await Dish.find().populate('userId', 'name');
-    res.status(200).json(dishes);
-  } catch (error) {
-    console.error('Error fetching dishes:', error);
-    res
-      .status(500)
-      .json({ message: 'Error fetching dishes', error: error.message });
-  }
+	try {
+		const dishes = await Dish.find().populate('userId', 'name');
+		res.status(200).json(dishes);
+	} catch (error) {
+		console.error('Error fetching dishes:', error);
+		res
+			.status(500)
+			.json({ message: 'Error fetching dishes', error: error.message });
+	}
 });
 
 app.post('/auth/google', async (req, res) => {
-  const { token, location } = req.body;
+	const { token, location } = req.body;
 
-  try {
-    const ticket = await client.verifyIdToken({
-      idToken: token,
-      audience: process.env.GOOGLE_CLIENT_ID,
-    });
+	try {
+		const ticket = await client.verifyIdToken({
+			idToken: token,
+			audience: process.env.GOOGLE_CLIENT_ID,
+		});
 
-    const payload = ticket.getPayload();
+		const payload = ticket.getPayload();
 
-    const updateData = {
-      email: payload.email,
-      name: payload.name,
-      picture: payload.picture,
-    };
+		const updateData = {
+			email: payload.email,
+			name: payload.name,
+			picture: payload.picture,
+		};
 
-    if (location) {
-      updateData.location = { coordinates: location };
-    }
+		if (location) {
+			updateData.location = { coordinates: location };
+		} else {
+			await User.updateOne(
+				{ googleId: payload.sub },
+				{ $unset: { location: '' } },
+			);
+		}
 
-    const user = await User.findOneAndUpdate(
-      { googleId: payload.sub },
-      updateData,
-      { upsert: true, new: true },
-    );
+		const user = await User.findOneAndUpdate(
+			{ googleId: payload.sub },
+			updateData,
+			{ upsert: true, new: true },
+		);
 
-    // Save user ID in session
-    req.session.userId = user._id;
+		// Save user ID in session
+		req.session.userId = user._id;
 
-    console.log('Successfully authenticated/verified user:', user.email);
+		console.log('Successfully authenticated/verified user:', user.email);
 
-    res.status(200).json({
-      message: 'Authentication successful',
-      user: user,
-    });
-  } catch (error) {
-    console.error('Error verifying Google token:', error);
-    res
-      .status(401)
-      .json({ message: 'Authentication failed', error: error.message });
-  }
+		res.status(200).json({
+			message: 'Authentication successful',
+			user: user,
+		});
+	} catch (error) {
+		console.error('Error verifying Google token:', error);
+		res
+			.status(401)
+			.json({ message: 'Authentication failed', error: error.message });
+	}
 });
 
 app.get('/auth/me', async (req, res) => {
-  if (!req.session.userId) {
-    return res.status(401).json({ message: 'Not authenticated' });
-  }
+	if (!req.session.userId) {
+		return res.status(401).json({ message: 'Not authenticated' });
+	}
 
-  try {
-    const user = await User.findById(req.session.userId);
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    res.status(200).json({ user });
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: 'Error fetching user', error: error.message });
-  }
+	try {
+		const user = await User.findById(req.session.userId);
+		if (!user) {
+			return res.status(404).json({ message: 'User not found' });
+		}
+		res.status(200).json({ user });
+	} catch (error) {
+		res
+			.status(500)
+			.json({ message: 'Error fetching user', error: error.message });
+	}
 });
 
 app.post('/auth/logout', (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      return res.status(500).json({ message: 'Could not log out' });
-    }
-    res.clearCookie('connect.sid');
-    res.status(200).json({ message: 'Logged out successfully' });
-  });
+	req.session.destroy((err) => {
+		if (err) {
+			return res.status(500).json({ message: 'Could not log out' });
+		}
+		res.clearCookie('connect.sid');
+		res.status(200).json({ message: 'Logged out successfully' });
+	});
 });
 
-app.post('/api/favDish', async (req, res) => {
-  const [
-    {
-      userId,
-      name,
-      restaurantName,
-      description,
-      rating,
-      imageUrl,
-      price,
-      location,
-      tags,
-    },
-  ] = req.body;
-
+app.post('/api/favDish', upload.single('image'), async (req, res) => {
   try {
-    const dish = await Dish.create(req.body[0]);
+    const dishData = {
+      ...req.body,
+      imageUrl: req.file.location,
+      tags: JSON.parse(req.body.tags)
+    };
+    const dish = await Dish.create(dishData);
     res.status(200).json(dish);
   } catch (error) {
-    console.error('Error updating dish:', error);
-    res
-      .status(500)
-      .json({ message: 'Error updating dish', error: error.message });
+    res.status(500).json({ message: 'Error saving dish' });
   }
 });
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../dist/index.html'));
+app.use((req, res) => {
+	res.sendFile(path.join(__dirname, '../dist/index.html'));
 });
-
 
 const server = app.listen(port, () => console.log(`Server on ${port}`));
 
 process.on('SIGTERM', () => {
-  console.log('SIGTERM signal received: closing HTTP server');
-  server.close(() => {
-    mongoose.connection.close(false, () => {
-      console.log('MongoDB connection closed.');
-      process.exit(0);
-    });
-  });
+	console.log('SIGTERM signal received: closing HTTP server');
+	server.close(() => {
+		mongoose.connection.close(false, () => {
+			console.log('MongoDB connection closed.');
+			process.exit(0);
+		});
+	});
 });

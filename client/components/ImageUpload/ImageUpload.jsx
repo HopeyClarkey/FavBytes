@@ -35,128 +35,121 @@ export default function ImageUpload({ isActive = true, setIsActive, user }) {
   //   location,
   //   tags,
   // },
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const formData = {
-      userId: user?._id,
-      name: title,
-      restaurantName,
-      description,
-      imageUrl: preview, // Placeholder
-      location: { address: location },
-      price: Number(price),
-      tags,
-      rating: stars,
-    };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  
+  const formData = new FormData();
+  formData.append("image", image);
+  formData.append("userId", user._id);
+  formData.append("name", title);
+  formData.append("restaurantName", restaurantName);
+  formData.append("description", description);
+  formData.append("rating", stars);
+  formData.append("price", price);
+  formData.append("location", location);
+  formData.append("tags", JSON.stringify(tags));
 
-    try {
-      const res = await fetch("/api/favDish", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify([formData]),
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        console.log("Form submitted!", data);
-        setIsActive(false);
-      }
-    } catch (err) {
-      console.error("cannot save dish:", err);
-    }
-  };
+  try {
+    const res = await fetch("/api/favDish", {
+      method: "POST",
+      body: formData, 
+    });
+  } catch (err) {
+    console.error(err);
+  }
+};
 
   return (
     <form id="image-upload" className="image-upload" onSubmit={handleSubmit}>
       <div id="image-upload-show-here" className="image-upload-show-here">
-        <button className="button-style" type="submit">
-          Submit Image!
-        </button>
+        <div id="upload-img" className="upload-img">
+          {preview ? (
+            <img
+              src={preview}
+              alt="Preview"
+              style={{ width: "100%", height: "auto", borderRadius: "8px" }}
+            />
+          ) : (
+            <span style={{ color: "white" }}>Image Preview</span>
+          )}
+        </div>
         <input
           type="file"
           accept="image/*"
           onChange={handleImageChange}
           required
         />
+        <button className="button-style" type="submit">
+          Submit Image!
+        </button>
+      </div>
 
-        <div id="upload-img" className="upload-img">
-          {preview && (
-            <img
-              src={preview}
-              alt="Preview"
-              style={{ width: "100%", marginTop: "10px" }}
+      <div className="image-upload-right-column">
+        <div id="image-upload-title" className="image-upload-title">
+          <label>
+            <input
+              type="text"
+              value={title}
+              style={{ width: "100%" }}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Image Title Goes Here!"
+              required
             />
-          )}
+          </label>
         </div>
-      </div>
 
-      <div id="image-upload-title" className="image-upload-title">
-        <label>
-          <input
-            type="text"
-            value={title}
-            style={{ width: "100%" }}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="Image Title Goes Here!"
-            required
-          />
-        </label>
-      </div>
+        <div id="image-upload-description" className="image-upload-description">
+          <label>
+            <input
+              value={description}
+              style={{ width: "100%" }}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Image Description Goes Here!"
+              required
+            />
+          </label>
+        </div>
 
-      <div id="image-upload-description" className="image-upload-description">
-        <label>
-          <input
-            value={description}
-            style={{ width: "100%" }}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Image Description Goes Here!"
-            required
-          />
-        </label>
-      </div>
+        <div id="image-upload-restaurant" className="image-upload-restaurant">
+          <label>
+            <input
+              type="text"
+              value={restaurantName}
+              style={{ width: '100%' }}
+              onChange={(e) => setRestaurantName(e.target.value)}
+              placeholder="Restaurant Name Goes Here!"
+              required
+            />
+          </label>
+        </div>
 
-      <div id="image-upload-restaurant" className="image-upload-restaurant">
-        <label>
-          <input
-            type="text"
-            value={restaurantName}
-            style={{ width: '100%' }}
-            onChange={(e) => setRestaurantName(e.target.value)}
-            placeholder="Restaurant Name Goes Here!"
-            required
-          />
-        </label>
-      </div>
+        <div id="image-upload-location" className="image-upload-location">
+          <label>
+            <input
+              type="text"
+              value={location}
+              style={{ width: '50%' }}
+              onChange={(e) => setLocation(e.target.value)}
+              placeholder="Image Location Goes Here!"
+            />
+          </label>
+        </div>
 
-      <div id="image-upload-location" className="image-upload-location">
-        <label>
-          <input
-            type="text"
-            value={location}
-            style={{ width: '100%' }}
-            onChange={(e) => setLocation(e.target.value)}
-            placeholder="Image Location Goes Here!"
-          />
-        </label>
-      </div>
-
-      <div id="image-upload-price" className="image-upload-price">
-        <label>
-          <input
-            type="number"
-            value={price}
-            style={{ width: '100%' }}
-            onChange={(e) => setPrice(e.target.value)}
-            placeholder="Price Goes Here!"
-          />
-        </label>
-      </div>
-      <div id="image-upload-tags" className="image-upload-tags">
-        <div
-          id="image-upload-tag-container"
-          className="image-upload-tag-container"
-        >
+        <div id="image-upload-price" className="image-upload-price">
+          <label>
+            <input
+              type="number"
+              value={price}
+              style={{ width: '50%' }}
+              onChange={(e) => setPrice(e.target.value)}
+              placeholder="Price Goes Here!"
+            />
+          </label>
+        </div>
+        <div id="image-upload-tags" className="image-upload-tags">
           <ImageUploadTags tags={tags} setTags={setTags} />
+        </div>
+        <div id="image-upload-stars" className="image-upload-stars">
           <ImageUploadStars stars={stars} setStars={setStars} />
         </div>
       </div>
