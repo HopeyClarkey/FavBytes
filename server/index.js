@@ -10,6 +10,7 @@ const Dish = require('../database/models/Dish.js');
 const compression = require('compression');
 const path = require('path');
 const mongoose = require('mongoose');
+const upload = require('./upload.js')
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -120,13 +121,33 @@ app.post('/auth/logout', (req, res) => {
   });
 });
 
-app.post('/api/favDish', async (req, res) => {
+app.post('/api/favDish', upload.single('image'), async (req, res) => {
+  console.log('req.file:', req.file);
   try {
-    const dish = await Dish.create(req.body);
-    res.status(200).json(dish);
+    const { userId, name, restaurantName, description, rating, price, location, lng, lat, tags } = req.body;
+
+    const dish = await Dish.create({
+      userId,
+      name,
+      restaurantName,
+      description,
+      rating: Number(rating),
+      price: Number(price),
+      imageUrl: req.file.location,
+      location: {
+        address: location,
+        coordinates: {
+          lat: lat ? Number(lat) : undefined,
+          lng: lng ? Number(lng) : undefined,
+        },
+      },
+      tags: JSON.parse(tags || '[]'),
+    });
+
+    res.status(201).json(dish);
   } catch (error) {
-    console.error('Error updating dish:', error);
-    res.status(500).json({ message: 'Error updating dish', error: error.message });
+    console.error('Error creating dish:', error);
+    res.status(500).json({ message: 'Error creating dish', error: error.message });
   }
 });
 

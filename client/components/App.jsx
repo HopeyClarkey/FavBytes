@@ -13,15 +13,18 @@ function MainView({
   setIsActive,
   user,
   dishes,
+  fetchDishes,
   setView,
   setSelectedLocation,
   selectedLocation,
 }) {
   return view === 'ImageUpload' ? (
     <ImageUpload
+    fetchDishes={fetchDishes}
       isActive={isActive}
       setIsActive={setIsActive}
       user={user}
+      setView={setView}
       prefillLocation={selectedLocation}
     />
   ) : view === 'ImagePage' ? (
@@ -47,7 +50,7 @@ export default function App() {
   const [dishes, setDishes] = useState([]);
   const [selectedDish, setSelectedDish] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
-  
+
   useEffect(() => {
     const checkAuth = async () => {
       try {
@@ -63,12 +66,17 @@ export default function App() {
     checkAuth();
   }, []);
 
-  useEffect(() => {
+  const fetchDishes = () => {
     fetch('/api/dishes')
       .then((res) => res.json())
       .then((data) => setDishes(data))
       .catch((err) => console.error(err));
+  };
+
+  useEffect(() => {
+    fetchDishes();
   }, []);
+
   const handleLoginSuccess = (userData) => {
     console.log(userData);
     setUser(userData);
@@ -159,6 +167,7 @@ export default function App() {
                       isActive={isActive}
                       setIsActive={setIsActive}
                       setView={setView}
+                      fetchDishes={fetchDishes}
                       setSelectedLocation={setSelectedLocation}
                       selectedLocation={selectedLocation}
                     />
