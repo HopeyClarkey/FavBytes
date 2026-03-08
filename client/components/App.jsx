@@ -7,16 +7,20 @@ import NavBar from './NavigationBar';
 import ImageUpload from './ImageUpload/ImageUpload';
 import logo from '../../public/images/FavBytes.png';
 
-function MainView({ view, isActive, setIsActive, user }) {
+function MainView({ view, isActive, setIsActive, user, dishes }) {
   return view === 'ImageUpload' ? (
     <ImageUpload isActive={isActive} setIsActive={setIsActive} user={user} />
   ) : view === 'ImagePage' ? (
     <ImagePage isActive={isActive} setIsActive={setIsActive} />
   ) : (
-    <HomePage isActive={isActive} setIsActive={setIsActive} user={user} />
+    <HomePage
+      isActive={isActive}
+      setIsActive={setIsActive}
+      user={user}
+      dishes={dishes}
+    />
   );
 }
-
 export default function App() {
   const [searchArr, setSearchArr] = useState([]);
   const [user, setUser] = useState(null);
@@ -24,8 +28,8 @@ export default function App() {
   const [isShowingGallery, setIsShowingGallery] = useState(false);
   const [view, setView] = useState('HomePage');
   const [isActive, setIsActive] = useState(false);
-    const [dishes, setDishes] = useState([]);
-    const [selectedDish, setSelectedDish] = useState(null);
+  const [dishes, setDishes] = useState([]);
+  const [selectedDish, setSelectedDish] = useState(null);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -42,24 +46,30 @@ export default function App() {
     checkAuth();
   }, []);
 
+
+  useEffect(() => {
+    fetch('/api/dishes')
+      .then((res) => res.json())
+      .then((data) => setDishes(data))
+      .catch((err) => console.error(err));
+  }, []);
   const handleLoginSuccess = (userData) => {
     console.log(userData);
     setUser(userData);
-
   };
 
   const handleLogout = async () => {
-  try {
-    await fetch('/auth/logout', { 
-      method: 'POST',
-      credentials: 'include' 
-    });
-    
-    setUser(null);
-  } catch (err) {
-    console.error('Logout failed:', err);
-  }
-};
+    try {
+      await fetch('/auth/logout', {
+        method: 'POST',
+        credentials: 'include',
+      });
+
+      setUser(null);
+    } catch (err) {
+      console.error('Logout failed:', err);
+    }
+  };
 
   const handleToggleSidebar = () => {
     setIsShowingSidebar(!isShowingSidebar);
@@ -99,7 +109,9 @@ export default function App() {
                 />
               </div>
               <div id="logout-container" className="logout-container">
-                <button className='button-style' onClick={handleLogout}>Log out</button>
+                <button className="button-style" onClick={handleLogout}>
+                  Log out
+                </button>
               </div>
             </div>
 
@@ -116,7 +128,10 @@ export default function App() {
 
                 <div id="main-area" className="main-area">
                   <div id="main-area-menu" className="main-area-menu">
-                    <button className='button-style' onClick={handleToggleSidebar}>
+                    <button
+                      className="button-style"
+                      onClick={handleToggleSidebar}
+                    >
                       {isShowingSidebar ? '← Hide Menu' : ' ☰ See Menu'}
                     </button>
                   </div>
@@ -124,12 +139,16 @@ export default function App() {
                     <MainView
                       view={view}
                       user={user}
+                      dishes={dishes}
                       isActive={isActive}
                       setIsActive={setIsActive}
                     />
                   </div>
                   <div id="gallery-menu" className="gallery-menu">
-                    <button className='button-style' onClick={handleToggleGallery}>
+                    <button
+                      className="button-style"
+                      onClick={handleToggleGallery}
+                    >
                       {isShowingGallery
                         ? '⋆.🗄˚ Hide Gallery ↓'
                         : '⋆.📷˚ Show Gallery ↑'}

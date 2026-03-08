@@ -1,12 +1,17 @@
-import {React, useState} from 'react';
-import Map from './Map';
 
-export default function HomePage({ isActive = true, setIsActive, user }) {
-  console.log(user)
+import Map from './Map';
+import ByteList from './ByteList';
+
+export default function HomePage({ user, dishes }) {
+
   return (
     <div id="homePage" className="homePage">
+      <div id="byteList">
+        <ByteList dishes={dishes} user={user}/>
+      </div>
+
       <div id="map" className="map">
-        <Map user={user} />
+        <Map dishes={dishes} user={user} />
       </div>
     </div>
   );
