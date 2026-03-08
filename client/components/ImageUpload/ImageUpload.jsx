@@ -36,35 +36,22 @@ export default function ImageUpload({ isActive = true, setIsActive, user }) {
   //   tags,
   // },
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const formData = {
-      userId: user?._id,
-      name: title,
-      restaurantName,
-      description,
-      imageUrl: preview, // Placeholder
-      location: { address: location },
-      price: Number(price),
-      tags,
-      rating: stars,
-    };
+  e.preventDefault();
+  
+  const formData = new FormData();
+  formData.append("image", image);
+  formData.append("title", title);
 
-    try {
-      const res = await fetch("/api/favDish", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify([formData]),
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        console.log("Form submitted!", data);
-        setIsActive(false);
-      }
-    } catch (err) {
-      console.error("cannot save dish:", err);
-    }
-  };
+  try {
+    const res = await fetch("/api/favDish", {
+      method: "POST",
+      // Note: Do NOT set Content-Type header; the browser does it for FormData
+      body: formData, 
+    });
+  } catch (err) {
+    console.error(err);
+  }
+};
 
   return (
     <form id="image-upload" className="image-upload" onSubmit={handleSubmit}>
