@@ -148,7 +148,7 @@ export default function App() {
                 />
               </div>
               <div id="logout-container" className="logout-container">
-                <button className="button-style" onClick={handleLogout}>
+                <button className="plain-button-style" onClick={handleLogout}>
                   Log out
                 </button>
               </div>
@@ -167,7 +167,7 @@ export default function App() {
                 <div id="main-area" className="main-area">
                   <div id="main-area-menu" className="main-area-menu">
                     <button
-                      className="button-style"
+                      className="plain-button-style"
                       onClick={handleToggleSidebar}
                     >
                       {isShowingSidebar ? '← Hide Menu' : '☰ See Menu'}
@@ -190,12 +190,12 @@ export default function App() {
                   </div>
                   <div id="gallery-menu" className="gallery-menu">
                     <button
-                      className="button-style"
+                      className="plain-button-style"
                       onClick={handleToggleGallery}
                     >
                       {isShowingGallery
-                        ? '⋆.🗄˚ Hide Gallery ↓'
-                        : '⋆.📷˚ Show Gallery ↑'}
+                        ? ' Hide Gallery ↓'
+                        : ' Show Gallery ↑'}
                     </button>
                   </div>
                 </div>
