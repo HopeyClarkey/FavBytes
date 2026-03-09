@@ -7,7 +7,6 @@ import NavBar from './NavigationBar';
 import ImageUpload from './ImageUpload/ImageUpload';
 import logo from '../../public/images/FavBytes.png';
 import { googleLogout } from '@react-oauth/google';
-import { googleLogout } from '@react-oauth/google';
 
 function MainView({
   view,
@@ -42,6 +41,7 @@ function MainView({
     />
   );
 }
+
 export default function App() {
   const [searchArr, setSearchArr] = useState([]);
   const [user, setUser] = useState(null);
@@ -68,21 +68,21 @@ export default function App() {
     checkAuth();
   }, []);
 
-const fetchDishes = () => {
-  fetch('/api/dishes')
-    .then((res) => res.json())
-    .then((data) => setDishes(data))
-    .catch((err) => console.error(err));
-};
+  const fetchDishes = () => {
+    fetch('/api/dishes')
+      .then((res) => res.json())
+      .then((data) => setDishes(data))
+      .catch((err) => console.error(err));
+  };
 
-const handleLoginSuccess = (userData) => {
-  setUser(userData);
-  fetchDishes();
-};
+  useEffect(() => {
+    fetchDishes();
+  }, []);
 
-useEffect(() => {
-  fetchDishes();
-}, []);
+  const handleLoginSuccess = (userData) => {
+    setUser(userData);
+    fetchDishes();
+  };
 
   const handleLogout = async () => {
     try {
@@ -90,7 +90,6 @@ useEffect(() => {
         method: 'POST',
         credentials: 'include',
       });
-
       if (res.ok) {
         setUser(null);
         setView('HomePage');
@@ -103,67 +102,57 @@ useEffect(() => {
     setUser(null);
   };
 
-	const handleToggleSidebar = () => {
-		setIsShowingSidebar(!isShowingSidebar);
-	};
+  const handleToggleSidebar = () => {
+    setIsShowingSidebar(!isShowingSidebar);
+  };
 
-	const handleToggleGallery = () => {
-		setIsShowingGallery(!isShowingGallery);
-	};
+  const handleToggleGallery = () => {
+    setIsShowingGallery(!isShowingGallery);
+  };
 
-	return (
-		<div id='app-container' className='app-container'>
-			{!user ? (
-				<LogIn onLoginSuccess={handleLoginSuccess} />
-			) : (
-				<>
-					<div id='logged-in' className='logged-in'>
-						<div
-							id='user-header-after-login'
-							className='user-header-after-login'>
-							<div id='profile-container' className='profile-container'>
-								{user.picture && (
-									<img
-										src={user.picture}
-										alt={user.name}
-										style={{ width: 50, height: 50, borderRadius: '50%' }}
-									/>
-								)}
-								<h1> Welcome,</h1>
-								{user.name} 😋
-							</div>
-							<div id='favBytes-container' className='favBytes-container'>
-								<img
-									className='Logo'
-									src={logo}
-									style={{ maxWidth: '250px' }}
-								/>
-							</div>
-							<div id='logout-container' className='logout-container'>
-								<button className='button-style' onClick={handleLogout}>
-									Log out
-								</button>
-							</div>
-						</div>
+  return (
+    <div id="app-container" className="app-container">
+      {!user ? (
+        <LogIn onLoginSuccess={handleLoginSuccess} />
+      ) : (
+        <>
+          <div id="logged-in" className="logged-in">
+            <div id="user-header-after-login" className="user-header-after-login">
+              <div id="profile-container" className="profile-container">
+                {user.picture && (
+                  <img
+                    src={user.picture}
+                    alt={user.name}
+                    style={{ width: 50, height: 50, borderRadius: '50%' }}
+                  />
+                )}
+                <h1>Welcome,</h1>
+                {user.name} 😋
+              </div>
+              <div id="favBytes-container" className="favBytes-container">
+                <img className="Logo" src={logo} style={{ maxWidth: '250px' }} />
+              </div>
+              <div id="logout-container" className="logout-container">
+                <button className="button-style" onClick={handleLogout}>
+                  Log out
+                </button>
+              </div>
+            </div>
 
-						<div id='content-row' className='content-row'>
-							<>
-								{isShowingSidebar && (
-									<NavBar
-										setView={setView}
-										view={view}
-										isShowingGallery={isShowingGallery}
-										onToggleGallery={handleToggleGallery}
-									/>
-								)}
-
+            <div id="content-row" className="content-row">
+              <>
+                {isShowingSidebar && (
+                  <NavBar
+                    setView={setView}
+                    view={view}
+                    isShowingGallery={isShowingGallery}
+                    onToggleGallery={handleToggleGallery}
+                  />
+                )}
                 <div id="main-area" className="main-area">
                   <div id="main-area-menu" className="main-area-menu">
-                    <button
-                      className="button-style"
-                      onClick={handleToggleSidebar}
-                    >
-                      {isShowingSidebar ? '← Hide Menu' : ' ☰ See Menu'}
+                    <button className="button-style" onClick={handleToggleSidebar}>
+                      {isShowingSidebar ? '← Hide Menu' : '☰ See Menu'}
                     </button>
                   </div>
                   <div id="main-view" className="main-view">
@@ -180,21 +169,21 @@ useEffect(() => {
                     />
                   </div>
                   <div id="gallery-menu" className="gallery-menu">
-                    <button
-                      className="button-style"
-                      onClick={handleToggleGallery}
-                    >
-                      {isShowingGallery
-                        ? '⋆.🗄˚ Hide Gallery ↓'
-                        : '⋆.📷˚ Show Gallery ↑'}
+                    <button className="button-style" onClick={handleToggleGallery}>
+                      {isShowingGallery ? '⋆.🗄˚ Hide Gallery ↓' : '⋆.📷˚ Show Gallery ↑'}
                     </button>
                   </div>
                 </div>
               </>
             </div>
+
             {isShowingGallery && (
               <div id="gallery-section" className="gallery-section">
-                <Gallery dishes={dishes} searchArr={searchArr} setSearchArr={setSearchArr} />
+                <Gallery
+                  dishes={dishes}
+                  searchArr={searchArr}
+                  setSearchArr={setSearchArr}
+                />
               </div>
             )}
           </div>
